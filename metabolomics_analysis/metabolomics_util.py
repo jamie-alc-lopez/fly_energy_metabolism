@@ -220,10 +220,16 @@ def generate_peak_heatmap(sample_names,anchor_sample,peak_df,label_names,title,
 def run_metab_pca(df):
 
     X = df.to_numpy()
+    
+    #Compute std of features
     std_X = X.std(axis=0)
     Y = X[:,std_X > 0]
     std_Y = std_X[std_X>0]
+    
+    #Compute mean of features
     mean_Y = Y.mean(axis=0)
+    
+    #Standardize
     Y = Y - mean_Y
     Y = Y/std_Y
     

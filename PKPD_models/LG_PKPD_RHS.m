@@ -48,16 +48,16 @@ dy(2) = par.delta*par.Ldiet - par.kaL*rxn_fun(Lgut) - par.delta*Lgut;
 
 %Central compartment glucose
 dy(3) = par.kaG*rxn_fun(Ggut) - kgly_eff*rxn_fun(G) ...
-    - par.CLG*G;
+    - par.keG*G;
 
 %Central compartment lactic acid
 dy(4) = par.kaL*rxn_fun(Lgut) - kldhf_eff*rxn_fun(L) ...
-    + kldhr_eff*rxn_fun(P) - par.CLL*L;
+    + kldhr_eff*rxn_fun(P) - par.keL*L;
 
 %Central compartment pyruvate
 dy(5) = 2*kgly_eff*rxn_fun(G) - ...
     kox_eff*rxn_fun(P) + kldhf_eff*rxn_fun(L)...
-    - kldhr_eff*rxn_fun(P) - par.CLP*P;
+    - kldhr_eff*rxn_fun(P) - par.keP*P;
 
 %Compute the energy flux
 energy_flux = par.gly_yield*kgly_eff*rxn_fun(G) + par.ox_yield*kox_eff*rxn_fun(P);

@@ -14,9 +14,9 @@ par.kldhr = 0.01;
 
 %Gut dilution rate and central compartment clearance rates
 par.delta = 0.5; 
-par.CLL = 0.1; 
-par.CLP = 0.1; 
-par.CLG = 0.1; 
+par.keL = 0.1; 
+par.keP = 0.1; 
+par.keG = 0.1; 
 
 %Diet parameters
 par.Gdiet = 0.5;
