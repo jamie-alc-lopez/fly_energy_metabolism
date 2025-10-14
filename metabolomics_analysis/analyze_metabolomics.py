@@ -44,7 +44,7 @@ microbes = ["LpWF","Ap","LpWFAp","none"]
 property_dict = {"media":'CDM',"microbe":microbes,"time":[0,48]}
 comparison_dict = {"media":True,"microbe":True,"time":True}
 pca_samples, pca_manifest = mu.subset_manifest(manifest,property_dict,comparison_dict)
-pca_df = peak_dict_n['Neg'].loc[pca_samples]
+pca_df = peak_dict_n['Neg'].loc[pca_samples].copy()
 
 #Perform PCA, get components
 pca, Y_transform = mu.run_metab_pca(pca_df)

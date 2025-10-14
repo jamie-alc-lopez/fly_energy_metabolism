@@ -43,20 +43,20 @@ def import_metabolomics(manifest_file,data_file):
         
         #Switches between pos and neg names so right indexing is used,
         if ("Neg" in key) & ("Pos" not in key):
-            ms_names = manifest.neg_name
+            ms_names = manifest.neg_name.copy()
         elif ("Neg" not in key) & ("Pos" in key):
-            ms_names = manifest.pos_name
+            ms_names = manifest.pos_name.copy()
         else: 
             raise ValueError("Invalid dataset name; cannot determine run polarity.")
                         
         #Extract dataframe of feature information  
         final_feature_index = ms_df.columns.to_list().index("Adduct type")
-        feature_info = ms_df.iloc[:, 0:(final_feature_index+1)] 
+        feature_info = ms_df.iloc[:, 0:(final_feature_index+1)].copy() 
 
         #Extract feature peak AUC data corresponding to manifest names
-        peak_data = ms_df.iloc[:,(final_feature_index+1):]
-        peak_data = peak_data.T
-        peak_data = peak_data.loc[ms_names]
+        peak_data = ms_df.iloc[:,(final_feature_index+1):].copy()
+        peak_data = peak_data.T.copy()
+        peak_data = peak_data.loc[ms_names].copy()
         
         #Exchange polarity-specific index for universal sample names
         peak_data.insert(0,"sample_name",sample_list)
@@ -64,8 +64,8 @@ def import_metabolomics(manifest_file,data_file):
         
         #Remove features that are zero across all samples in the dataset
         nonzero_feature_IDs = peak_data.columns[peak_data.sum() > 0]
-        peak_data = peak_data.loc[:,nonzero_feature_IDs]
-        feature_info = feature_info.loc[nonzero_feature_IDs]
+        peak_data = peak_data.loc[:,nonzero_feature_IDs].copy()
+        feature_info = feature_info.loc[nonzero_feature_IDs].copy()
         
         #Add these to the dictionaries
         peak_dict[key] = peak_data
@@ -111,9 +111,9 @@ def average_replicates(manifest,peak_dict):
     
     #Get condition groupings, make new manifest
     g = manifest.groupby('condition')
-    manifest_av = manifest.drop_duplicates(subset=['condition'])
+    manifest_av = manifest.drop_duplicates(subset=['condition']).copy()
     manifest_av.set_index('condition',inplace=True)
-    manifest_av = manifest_av.drop(['neg_name','rep'],axis='columns')
+    manifest_av = manifest_av.drop(['neg_name','rep'],axis='columns').copy()
     
     #Make empty new dictionaries
     peak_dict_av = dict.fromkeys(peak_dict.keys())
@@ -175,7 +175,7 @@ def subset_manifest(manifest,property_dict,comparison_dict):
     
     #Get final sample and manifest from comparison
     matching_samples = manifest.index[total_index].to_list()
-    matching_manifest = manifest.loc[matching_samples]
+    matching_manifest = manifest.loc[matching_samples].copy()
     
     return matching_samples, matching_manifest
         
@@ -192,7 +192,7 @@ def generate_peak_heatmap(sample_names,anchor_sample,peak_df,label_names,title,
                           clabel='log10 normalized AUC',fontsize=12,cmap="BrBG",
                           cbarticks=None):
     
-    peak_df = peak_df.loc[sample_names]
+    peak_df = peak_df.loc[sample_names].copy()
     peak_df.sort_values(axis=1,by=anchor_sample,ascending=False,inplace=True)
     plt_df = np.log10(peak_df)
     fig, ax = plt.subplots(figsize=(6.4,6.4))
